@@ -2,7 +2,7 @@ import createDebug from "debug";
 import { type CustomError } from "../CustomError/CustomError.js";
 import { app } from "./index.js";
 
-const debug = createDebug("robots:server:startServer");
+const debug = createDebug("eventizi:server:startServer");
 
 const startServer = async (port: number) =>
   new Promise((resolve, reject) => {
