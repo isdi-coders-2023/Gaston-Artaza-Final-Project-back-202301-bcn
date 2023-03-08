@@ -15,7 +15,6 @@ export const loginUser = async (
   next: NextFunction
 ) => {
   const { username, password } = req.body;
-
   const user = await User.findOne({ username }).exec();
   if (!user) {
     const customError = new CustomError(
@@ -34,6 +33,7 @@ export const loginUser = async (
       "Wrong credentials"
     );
     next(customError);
+    return;
   }
 
   const jwtPayload = {
