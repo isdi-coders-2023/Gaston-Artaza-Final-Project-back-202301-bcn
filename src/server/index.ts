@@ -1,6 +1,6 @@
 import express from "express";
 import morgan from "morgan";
-import userRouters from "./routers/user/userRouters";
+import userRouters from "./routers/user/userRouters.js";
 
 export const app = express();
 app.disable("x-powered-by");
