@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { loginUser } from "../../controllers/user/userControllers";
 import { check } from "express-validator";
+import { checkFields } from "../../middleWares/checkFields";
 
 const userRouters = Router();
 
@@ -13,6 +14,7 @@ userRouters.post(
       min: 6,
     }),
   ],
+  checkFields,
   loginUser
 );
 
