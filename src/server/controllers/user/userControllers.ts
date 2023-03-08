@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
 import { type NextFunction, type Request, type Response } from "express";
 import bcrypt from "bcryptjs";
-import User from "../../../database/models/user/User";
+import User from "../../../database/models/user/User.js";
 import { type UserCredentials } from "./types";
-import { CustomError } from "../../../CustomError/CustomError";
+import { CustomError } from "../../../CustomError/CustomError.js";
 
 export const loginUser = async (
   req: Request<
@@ -15,6 +15,7 @@ export const loginUser = async (
   next: NextFunction
 ) => {
   const { username, password } = req.body;
+
   const user = await User.findOne({ username }).exec();
   if (!user) {
     const customError = new CustomError(
