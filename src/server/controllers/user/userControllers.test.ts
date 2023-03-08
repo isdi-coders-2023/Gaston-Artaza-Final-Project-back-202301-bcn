@@ -24,7 +24,7 @@ describe("Given a loginUser controller", () => {
   };
 
   describe("When it receives a request with a username 'jose' and password 'larralde78/*zz' and the user is not registered in the database", () => {
-    test("Then it should call its next method with a status 401 and the messages 'Wrong username' and 'Wrong credentials'", async () => {
+    test("Then it should call its next method with a status 401 and the messages 'User name not found' and 'Wrong credentials'", async () => {
       const expectedError = new CustomError(
         "User name not found",
         401,
@@ -50,7 +50,40 @@ describe("Given a loginUser controller", () => {
     });
   });
 
-  describe("When it receives a request with a username `jose` and password `larralde78/*zz` and the user is registered in the database", () => {
+  describe("When it recieves a request with a username  'jose' and password 'larralde' and the user is registered in the database but the password is incorrect", () => {
+    test("Then it shouls call  the next method with the message 'Wrong password', the status code 401 and the message 'Wrong credentials'", async () => {
+      const mockError = new CustomError(
+        "Wrong password",
+        401,
+        "Wrong credentials"
+      );
+
+      req.body = mockUser;
+
+      User.findOne = jest.fn().mockImplementationOnce(() => ({
+        exec: jest.fn().mockResolvedValue({
+          ...mockUser,
+          _id: new mongoose.Types.ObjectId(),
+        }),
+      }));
+
+      bcrypt.compare = jest.fn().mockResolvedValue(false);
+
+      await loginUser(
+        req as Request<
+          Record<string, unknown>,
+          Record<string, unknown>,
+          UserCredentials
+        >,
+        res as Response,
+        next
+      );
+
+      expect(next).toHaveBeenCalledWith(mockError);
+    });
+  });
+
+  describe("When it receives a request with a username 'jose' and password 'larralde78/*zz' and the user is registered in the database", () => {
     const expectedToken = "otroletravaladna9¡*25";
     const expectedResponse = { token: expectedToken };
 
