@@ -1,8 +1,8 @@
-import createDebug from "debug";
 import { type NextFunction, type Request, type Response } from "express";
-import { CustomError } from "../../../CustomError/CustomError";
+import createDebug from "debug";
+import { CustomError } from "../../../CustomError/CustomError.js";
 
-const debug = createDebug("social:generalErrors");
+export const debug = createDebug("eventizi:*");
 
 export const notFoundError = (
   req: Request,
@@ -10,7 +10,7 @@ export const notFoundError = (
   next: NextFunction
 ) => {
   const notFoundError = new CustomError(
-    "Path not found",
+    "Wrong endpoint",
     404,
     "Endpoint not found"
   );
@@ -28,5 +28,5 @@ export const generalError = (
 
   res
     .status(error.statusCode || 500)
-    .json({ error: error.publicMessage || "Something went wrong" });
+    .json({ error: error.publicMessage || "Something went wrong :(" });
 };
