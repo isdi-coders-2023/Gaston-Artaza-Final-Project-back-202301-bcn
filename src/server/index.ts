@@ -6,12 +6,13 @@ import userRouters from "./routers/user/userRouters.js";
 export const app = express();
 app.disable("x-powered-by");
 
-const corsOptions = {
-  origin: "http://localhost:19006",
-  optionsSuccessStatus: 200,
+const localHost = ["http://localhost:19006"];
+
+const options: cors.CorsOptions = {
+  origin: localHost,
 };
 
-app.use(cors(corsOptions));
+app.use(cors(options));
 app.use(morgan("dev"));
 app.use(express.json());
 app.use("/users", userRouters);

@@ -15,7 +15,6 @@ export const loginUser = async (
   next: NextFunction
 ) => {
   const { username, password } = req.body;
-
   try {
     const user = await User.findOne({ username }).exec();
     if (!user) {
@@ -27,7 +26,8 @@ export const loginUser = async (
     }
 
     const jwtPayload = {
-      sub: user?._id,
+      id: user?._id,
+      username,
     };
 
     const token = jwt.sign(jwtPayload, process.env.JWT_SECRET!, {
