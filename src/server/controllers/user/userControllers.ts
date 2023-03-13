@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import { type NextFunction, type Request, type Response } from "express";
 import bcrypt from "bcryptjs";
 import User from "../../../database/models/user/User.js";
-import { type CustomTokenPayload, type UserCredentials } from "./types";
+import { type UserCredentials } from "./types";
 import { CustomError } from "../../../CustomError/CustomError.js";
 
 export const loginUser = async (
