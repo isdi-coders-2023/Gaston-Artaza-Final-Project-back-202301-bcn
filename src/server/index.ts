@@ -11,7 +11,12 @@ import {
 export const app = express();
 app.disable("x-powered-by");
 
-const localHost = ["http://localhost:19006"];
+const localHost = [
+  "http://localhost:19006",
+  "http://localhost:19007",
+  "http://localhost:19001",
+  "http://localhost:19002",
+];
 
 const options: cors.CorsOptions = {
   origin: localHost,
