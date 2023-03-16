@@ -21,3 +21,20 @@ export const getEvents = async (
     next(customError);
   }
 };
+
+export const deleteEventById = async (
+  req: Request<Record<string, unknown>, Record<string, unknown>>,
+  res: Response,
+  next: NextFunction
+) => {
+  const { eventId } = req.params;
+
+  try {
+    await Event.findByIdAndDelete(eventId).exec();
+    res.status(200).json({
+      message: "Event deleted succesfull",
+    });
+  } catch (error: unknown) {
+    next(error);
+  }
+};
