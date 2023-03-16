@@ -1,4 +1,4 @@
 {
   "*.ts": "eslint --max-warnings=0",
-  "*.{ts,json}": "prettier --write"
+  "*.{js,ts,json}": "prettier --write"
 }
