@@ -33,12 +33,14 @@ export const deleteEventById = async (
     const findEventById = await Event.findById(eventId);
 
     if (!findEventById) {
-      throw new CustomError("Event id not valid", 401, "Event not founded");
+      throw new CustomError("Event id not valid", 404, "Event not founded");
     }
 
-    const eventToDelete = await Event.findByIdAndDelete(eventId);
+    await Event.findByIdAndDelete(eventId);
 
-    res.status(200).json(eventToDelete);
+    res.status(200).json({
+      message: "Event deleted succesfull",
+    });
   } catch (error: unknown) {
     next(error);
   }

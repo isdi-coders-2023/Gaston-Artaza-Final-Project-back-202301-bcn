@@ -1,4 +1,5 @@
-export interface Event {
+export interface EventStructure {
+  id: string;
   name: string;
   location: string;
   image: string;
@@ -8,4 +9,4 @@ export interface Event {
   category: string[];
 }
 
-export type Events = [Event];
+export type Events = [EventStructure];
