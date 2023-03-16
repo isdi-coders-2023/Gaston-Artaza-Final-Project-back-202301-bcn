@@ -21,3 +21,25 @@ export const getEvents = async (
     next(customError);
   }
 };
+
+export const deleteEventById = async (
+  req: Request<Record<string, unknown>, Record<string, unknown>>,
+  res: Response,
+  next: NextFunction
+) => {
+  const eventId = req.params;
+
+  try {
+    const findEventById = await Event.findById(eventId);
+
+    if (!findEventById) {
+      throw new CustomError("Event id not valid", 401, "Event not founded");
+    }
+
+    const eventToDelete = await Event.findByIdAndDelete(eventId);
+
+    res.status(200).json(eventToDelete);
+  } catch (error: unknown) {
+    next(error);
+  }
+};
