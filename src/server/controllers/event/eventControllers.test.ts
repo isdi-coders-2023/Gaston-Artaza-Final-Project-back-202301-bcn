@@ -1,5 +1,4 @@
 import { type NextFunction, type Request, type Response } from "express";
-import mongoose from "mongoose";
 import Event from "../../../database/models/event/Event";
 import { type Events, type EventStructure } from "../../../types";
 import { deleteEventById, getEvents } from "./eventControllers";
@@ -74,37 +73,28 @@ describe("Given the getEvents controller", () => {
 });
 
 describe("Given deleteById controller", () => {
-  const expectedStatus = 200;
-
-  const mockEvent: EventStructure = {
-    id: "g1a2s3ton",
-    name: "Summer Music Festival",
-    location: "Costa Brava Beach",
-    image: "summer_music_festival.jpg",
-    date: "2023-07-15",
-    time: "18:00:00",
-    organizer: "ABC Productions",
-    category: ["music", "festival"],
-  };
-
-  const res: Partial<Response> = {
-    status: jest.fn().mockReturnThis(),
-    json: jest.fn(),
-  };
-
-  const req = {
-    params: {},
-  } as Request;
-
-  const next: NextFunction = jest.fn();
-
   describe("When it recieves an event id and the event exist on the database", () => {
     test("Then it should call it status method with '200' as status code", async () => {
-      mongoose.Types.ObjectId.isValid = () => true;
+      const expectedStatus = 200;
 
-      Event.findByIdAndDelete = jest.fn().mockImplementationOnce(() => ({
-        exec: jest.fn().mockResolvedValue({}),
-      }));
+      const mockEvent: EventStructure = {
+        id: "g1a2s3ton",
+        name: "Summer Music Festival",
+        location: "Costa Brava Beach",
+        image: "summer_music_festival.jpg",
+        date: "2023-07-15",
+        time: "18:00:00",
+        organizer: "ABC Productions",
+        category: ["music", "festival"],
+      };
+
+      req.params = { id: mockEvent.id };
+
+      Event.findByIdAndDelete = jest.fn().mockReturnValue({
+        exec: jest.fn().mockReturnValue({
+          mockEvent,
+        }),
+      });
 
       await deleteEventById(
         req as Request<
@@ -120,13 +110,11 @@ describe("Given deleteById controller", () => {
       expect(res.status).toHaveBeenCalledWith(expectedStatus);
     });
 
-    describe("When it receives a request and the deleting process fails", () => {
-      test("Then it should call the received next function with message 'Event not founded'", async () => {
-        const expectedErrorMessage = "Event not founded";
-
-        mongoose.Types.ObjectId.isValid = () => true;
-
-        Event.findByIdAndDelete = jest.fn().mockReturnValue(new Error());
+    describe("When receives an event id incorrect", () => {
+      test("Then it should call the next method with '404 as status code'", async () => {
+        Event.findByIdAndDelete = jest.fn().mockReturnValue({
+          exec: jest.fn().mockRejectedValue(new Error("")),
+        });
 
         await deleteEventById(
           req as Request<
