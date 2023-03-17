@@ -1,8 +1,12 @@
 import { Router } from "express";
-import { getEvents } from "../../controllers/event/eventControllers.js";
+import {
+  deleteEventById,
+  getEvents,
+} from "../../controllers/event/eventControllers.js";
 
 const eventRouters = Router();
 
 eventRouters.get("/", getEvents);
+eventRouters.delete("/:id", deleteEventById);
 
 export default eventRouters;
