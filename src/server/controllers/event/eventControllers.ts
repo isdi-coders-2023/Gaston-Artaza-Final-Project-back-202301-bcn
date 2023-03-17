@@ -27,10 +27,10 @@ export const deleteEventById = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { eventId } = req.params;
+  const { id } = req.params;
 
   try {
-    await Event.findByIdAndDelete(eventId).exec();
+    await Event.findByIdAndDelete(id).exec();
     res.status(200).json({
       message: "Event deleted succesfull",
     });
