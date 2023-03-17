@@ -1,5 +1,5 @@
 import { type NextFunction, type Response } from "express";
-import { CustomError } from "../../../CustomError/CustomError";
+import { CustomError } from "../../../CustomError/CustomError.js";
 import { type UserTokenPayload, type CustomRequest } from "../../../types";
 import jwt from "jsonwebtoken";
 
