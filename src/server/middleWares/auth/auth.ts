@@ -31,6 +31,7 @@ const auth = (req: CustomRequest, res: Response, next: NextFunction) => {
     ) as UserTokenPayload;
 
     req.userId = id;
+    next();
   } catch (error: unknown) {
     next(error);
   }

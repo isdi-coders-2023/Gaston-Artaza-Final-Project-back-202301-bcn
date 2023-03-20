@@ -32,7 +32,7 @@ export const deleteEventById = async (
   try {
     await Event.findByIdAndDelete(id).exec();
     res.status(200).json({
-      message: "Event deleted succesfull",
+      message: "Event succesfully deleted",
     });
   } catch (error: unknown) {
     next(error);
