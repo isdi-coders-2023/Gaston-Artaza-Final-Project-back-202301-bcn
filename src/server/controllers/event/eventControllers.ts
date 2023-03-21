@@ -38,3 +38,23 @@ export const deleteEventById = async (
     next(error);
   }
 };
+
+export const getEventById = async (
+  req: Request<Record<string, unknown>, Record<string, unknown>>,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+
+  try {
+    const event = await Event.findById(id).exec();
+
+    if (!event) {
+      throw new CustomError("Event not found", 400, "Bad request");
+    }
+
+    res.status(200).json({ event });
+  } catch (error: unknown) {
+    next(error);
+  }
+};

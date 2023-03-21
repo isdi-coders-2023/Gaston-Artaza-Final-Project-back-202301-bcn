@@ -1,7 +1,7 @@
 import { type NextFunction, type Request, type Response } from "express";
 import Event from "../../../database/models/event/Event";
 import { type Events, type EventStructure } from "../../../types";
-import { deleteEventById, getEvents } from "./eventControllers";
+import { deleteEventById, getEventById, getEvents } from "./eventControllers";
 
 beforeEach(() => jest.clearAllMocks());
 
@@ -129,6 +129,67 @@ describe("Given deleteById controller", () => {
 
         expect(next).toHaveBeenCalled();
       });
+    });
+  });
+});
+
+describe("Given getEventById controller", () => {
+  describe("When it recieves an event id that exist on the database", () => {
+    test("Then it should call the status method with 200", async () => {
+      const expectedStatus = 200;
+      const mockEvent: EventStructure = {
+        id: "g1a2s3ton",
+        name: "Summer Music Festival",
+        location: "Costa Brava Beach",
+        image: "summer_music_festival.jpg",
+        date: "2023-07-15",
+        time: "18:00:00",
+        organizer: "ABC Productions",
+        category: ["music", "festival"],
+      };
+
+      req.params = { id: mockEvent.id };
+
+      Event.findById = jest.fn().mockReturnValue({
+        exec: jest.fn().mockReturnValue({
+          mockEvent,
+        }),
+      });
+
+      await getEventById(
+        req as Request<
+          Record<string, unknown>,
+          Record<string, unknown>,
+          Record<string, unknown>,
+          { id: string }
+        >,
+        res as Response,
+        next
+      );
+
+      expect(res.status).toHaveBeenCalledWith(expectedStatus);
+    });
+  });
+
+  describe("When it recieves an id that doesn't exist on the database", () => {
+    test("Then it should call the next method with 400 as status code", async () => {
+      const expectedStatus = 400;
+      Event.findById = jest.fn().mockReturnValue({
+        exec: jest.fn().mockRejectedValue(new Error("")),
+      });
+
+      await getEventById(
+        req as Request<
+          Record<string, unknown>,
+          Record<string, unknown>,
+          Record<string, unknown>,
+          { id: string }
+        >,
+        res as Response,
+        next
+      );
+
+      expect(next).toHaveBeenCalled();
     });
   });
 });
